@@ -14,8 +14,6 @@ class Pegasos(object):
         self.projection = projection
         self.labelEncoder = None
         self.bias = bias
-        self.w = np.zeros((X.shape[1], 1))
-        print("Done")
  
     def fit(self, X, Y):
         self.labelEncoder = preprocessing.LabelEncoder()
@@ -39,12 +37,12 @@ class Pegasos(object):
             
     def predict(self, X):
         Ypred = (((X)@self.w))
-        Y =  clf.labelEncoder.inverse_transform(((1 + (np.sign(Ypred)))/2).astype(int))
+        Y =  self.labelEncoder.inverse_transform(((1 + (np.sign(Ypred)))/2).astype(int))
         return Y
     
     def test(self, X, Y):
         Ypred = (((X)@self.w))
-        Y =  clf.labelEncoder.inverse_transform(((1 + (np.sign(Ypred)))/2).astype(int))
+        Y =  self.labelEncoder.inverse_transform(((1 + (np.sign(Ypred)))/2).astype(int))
         
         accuracy = accuracy_score(Y, testY)
         f1 = f1_score(Y, testY)
@@ -102,7 +100,7 @@ class Mercer_Pegasos(Pegasos):
         Ypred[Ypred > 0 ] = 1
         Ypred[Ypred <= 0 ] = 0
 
-        Y =  clf.labelEncoder.inverse_transform(Ypred.astype(int))
+        Y =  self.labelEncoder.inverse_transform(Ypred.astype(int))
         
         accuracy = accuracy_score(Y, testY)
         f1 = f1_score(Y, testY)
